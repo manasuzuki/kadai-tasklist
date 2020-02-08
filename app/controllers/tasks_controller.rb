@@ -1,25 +1,30 @@
 class TasksController < ApplicationController
+  #applicationcontrollerを継承している
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
       @tasks = Task.all
+      #task全て集める
   end
 
   def show
   end
 
   def new
-      @task= Task.new
+      @task= Task.new 
+      #新しくtask作る
   end
 
   def create
-    @task = Task.new(task_params)
-
+    @task = Task.new(task_params) #新しく作ったタスクのデータ集めてきて(contentとstatusの)
     if @task.save
-      flash[:success] = 'Task が正常に投稿されました'
-      redirect_to @task
+      flash[:success] = 'Task が正常に投稿されました' 
+      #flashは少しメッセージを表示するときに使う
+      redirect_to @task #showページとばす
     else
       flash.now[:danger] = 'Task が投稿されませんでした'
-      render :new
+      render :new #newページ表示する
+      
+      #redirectのときは長く表示されるflash,renderの時は少しだけ表示されるflash.now
     end
   end
 
@@ -29,12 +34,13 @@ class TasksController < ApplicationController
 
   def update
       
-    if @task.update(task_params)
+    if @task.update(task_params) 
+      #更新したタスクのデータを集めて
       flash[:success] = 'Task は正常に更新されました'
-      redirect_to @task
+      redirect_to @task　#showアクションからshowページへ
     else
       flash.now[:danger] = 'Task は更新されませんでした'
-      render :edit
+      render :edit　#editページ
     end
   end
 
@@ -42,16 +48,19 @@ class TasksController < ApplicationController
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
-    redirect_to tasks_url
+    redirect_to @task　#showアクションに飛んでからshowページに
   end
   
   private
   def set_task
     @task = Task.find(params[:id])
+    #idにあったデータを探してきて！とモデルに言ってる
   end
   
-  def task_params
+  def task_params #Strong parameter,セキュリティ対策
     params.require(:task).permit(:content, :status)
+    #送られてきたデータを全て受け入れるのではなくて、特定のデータだけ受け取るよ！というもの、
+    #contentとstatus以外のカラムを無視する
   end
   
 end
