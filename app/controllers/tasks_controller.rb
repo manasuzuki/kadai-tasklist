@@ -7,6 +7,8 @@ class TasksController < ApplicationController
     if logged_in?
       @tasks = current_user.tasks.order(id: :desc)  # form_with 用
       #task全て集める
+    else
+      redirect_to login_path
     end  
   end
 
