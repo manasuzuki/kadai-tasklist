@@ -2,7 +2,7 @@
   <% if task.errors.any? %>
     <div id="error_explanation">
       <ul>
-        <% task.errors.full_tasks.each do |task| %>
+        <% task.errors.full_messages.each do |task| %>
           <li><%= task %></li>
         <% end %>
       </ul>
@@ -19,13 +19,4 @@
   <%= f.submit '投稿' %>
 <% end %>
 
-<!--microposts
-Login要求→
-login画面→
-一覧show --
-
-
-Tasklist
-Signup要求→Login要求→一覧
-Login要求→一覧>
 

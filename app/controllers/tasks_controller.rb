@@ -4,8 +4,10 @@ class TasksController < ApplicationController
   #applicationcontrollerを継承している
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
-      @tasks = Task.all
+    if logged_in?
+      @tasks = current_user.tasks.order(id: :desc)  # form_with 用
       #task全て集める
+    end  
   end
 
   def show
@@ -17,12 +19,13 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params) #新しく作ったタスクのデータ集めてきて(contentとstatusの)
+    @task = current_user.tasks.build(task_params) #新しく作ったタスクのデータ集めてきて(contentとstatusの)
     if @task.save
       flash[:success] = 'Task が正常に投稿されました' 
       #flashは少しメッセージを表示するときに使う
       redirect_to @task #showページとばす
     else
+      @tasks = current_user.tasks.order(id: :desc)
       flash.now[:danger] = 'Task が投稿されませんでした'
       render :new #newページ表示する
       
@@ -39,7 +42,7 @@ class TasksController < ApplicationController
     if @task.update(task_params) 
       #更新したタスクのデータを集めて
       flash[:success] = 'Task は正常に更新されました'
-      redirect_to @task　#showアクションからshowページへ
+      redirect_to @task
     else
       flash.now[:danger] = 'Task は更新されませんでした'
       render :edit　#editページ
