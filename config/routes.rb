@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
-  get 'users/index'
-  get 'users/show'
-  get 'users/new'
-  get 'users/create'
+  
+  get 'sessions/new'
+  get 'sessions/create'
+  get 'sessions/destroy'
    root to: 'tasks#index'
    #トップページにアクセス、indexがトップページ
    resources :tasks
   #編集したり削除したりのいろんな動作が可能になる
+  get 'login', to: 'sessions#new'
+  post 'login', to: 'sessions#create'
+  delete 'logout', to: 'sessions#destroy'
+  
    resources :users, only: [:index, :show, :new, :create]
 end

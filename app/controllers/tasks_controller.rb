@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  
+  before_action :require_user_logged_in, only: [:show]
   #applicationcontrollerを継承している
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
@@ -48,7 +50,7 @@ class TasksController < ApplicationController
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
-    redirect_to @task　#showアクションに飛んでからshowページに
+    redirect_to @task #showアクションに飛んでからshowページに
   end
   
   private
