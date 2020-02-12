@@ -1,15 +1,11 @@
 class TasksController < ApplicationController
   
-  before_action :require_user_logged_in, only: [:show]
+  before_action :require_user_logged_in, only: [:index, :show]
   #applicationcontrollerを継承している
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
-    if logged_in?
       @tasks = current_user.tasks.order(id: :desc)  # form_with 用
       #task全て集める
-    else
-      redirect_to login_path
-    end  
   end
 
   def show
@@ -68,6 +64,13 @@ class TasksController < ApplicationController
     params.require(:task).permit(:content, :status)
     #送られてきたデータを全て受け入れるのではなくて、特定のデータだけ受け取るよ！というもの、
     #contentとstatus以外のカラムを無視する
+  end
+  
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      redirect_to root_url
+    end
   end
   
 end

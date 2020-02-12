@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:success] = 'ユーザを登録しました。'
-      redirect_to "/"
+      redirect_to root_url
       #redirect先が違う
     else
       flash.now[:danger] = 'ユーザの登録に失敗しました。'
